@@ -7,12 +7,12 @@
       "default",
       {
         "ignore": [
-          "text-size-adjust",
           "-webkit-overflow-scrolling",
-          "overflow-x: clip",
-          "overflow-y: clip"
+          "-webkit-text-size-adjust",
+          "text-align: -webkit-match-parent"
         ]
       }
-    ]
+    ],
+    "css-prefix-order": "off"
   }
 }

@@ -9,7 +9,9 @@
         "ignore": [
           "-webkit-overflow-scrolling",
           "-webkit-text-size-adjust",
-          "text-align: -webkit-match-parent"
+          "text-align: -webkit-match-parent",
+          "overflow-anchor",
+          "text-underline-offset"
         ]
       }
     ],

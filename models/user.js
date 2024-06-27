@@ -3,6 +3,32 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
+
+const discountSchema = new Schema({
+    code: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    type: {
+        type: String,
+        enum: ['percentage', 'fixed'],
+        required: true
+    },
+    value: {
+        type: Number,
+        required: true
+    },
+    expirationDate: {
+        type: Date,
+        required: true
+    }
+});
+
+
+
+
+
 const userSchema = new Schema({
 
     email: {
@@ -36,7 +62,8 @@ const userSchema = new Schema({
         type: String,
         enum: ['user', 'admin'], 
         default: 'user' 
-    }
+    },
+    discounts: [discountSchema]
 });
 
 
@@ -68,7 +95,7 @@ userSchema.methods.addTocart = function (product) {
 }
 
 
-
+//remove from cart  in user model
 userSchema.methods.removeFromCart = function (productId) {
     const updatedcartItems = this.cart.items.filter(item => {
         return item.productId.toString() !== productId.toString()
@@ -77,12 +104,24 @@ userSchema.methods.removeFromCart = function (productId) {
     return this.save();
 }
 
+// clear cart
 userSchema.methods.clearCart = function () {
     this.cart = {
         items: []
     };
     return this.save();
 }
+//add discount
+userSchema.methods.addDiscount = function (discount) {
+    this.discounts.push(discount);
+    return this.save();
+};
+//remove Expired Discounts
+userSchema.methods.removeExpiredDiscounts = function () {
+    const currentDate = new Date();
+    this.discounts = this.discounts.filter(discount => discount.expirationDate > currentDate);
+    return this.save();
+};
 
 
 module.exports = mongoose.model('User', userSchema);
